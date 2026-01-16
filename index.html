@@ -15,54 +15,54 @@
 <title>AMSS Portal</title>
 
 <style>
-/* ---------- FAST BACKGROUND ---------- */
-html {
- background: #049235; /* fallback color */
-}
-
-body {
+/* ---------- IMMEDIATE BACKGROUND ---------- */
+html, body {
   margin: 0;
+  padding: 0;
   min-height: 100vh;
-  font-family: 'Lucida Sans', Verdana, sans-serif;
-
-  /* background image + subtle green overlay */
-  background:
-    url("img1.png") no-repeat center center fixed;
-  background-size: cover;
-  background-attachment: fixed;
-
+   font-family: Georgia, "Times New Roman", serif;
+  background: url("img1.png") center/cover no-repeat fixed;
   color: #ffffff;
-  animation: subtleMove 15s ease-in-out infinite;
+  overflow-x: hidden;
   transition: background-color 0.3s, color 0.3s;
-}
-
-/* subtle animated background movement 
-@keyframes subtleMove {
-  0% { background-position: center center; }
-  50% { background-position: center 10%; }
-  100% { background-position: center center; }
 }
 
 /* Dark Mode */
 body.dark-mode {
-  background:
-    linear-gradient(rgba(30, 3, 3, 0.95), rgba(18,18,18,0.95)),
-    url("img1.png") no-repeat center center fixed;
-  background-size: cover;
+  background: linear-gradient(rgba(18,18,18,0.85), rgba(18,18,18,0.85)), 
+              url("img1.png") center/cover no-repeat fixed;
   color: #ffffff;
+}
+
+/* Fixed circular logo at top-left */
+#logo-fixed {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #10b981;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
 /* Dark Mode button */
 #darkToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
   border: 1px solid white;
 }
 
 /* Hero Section */
 .hero {
-  background: rgba(9, 107, 69, 0.5);
-  max-width: 520px;
-  margin: 2rem auto 1rem auto;
-  padding: .2rem;
+  background: rgba(1,14,9,0.5);
+  max-width: 500px;
+  margin: 7rem auto 1rem auto;
+  padding: 1rem;
   text-align: center;
 
   border-bottom: 1rem solid rgb(28,167,214);
@@ -72,19 +72,20 @@ body.dark-mode {
   border-bottom-right-radius: 2rem;
 }
 
-/* School Logo */
-.school-logo {
-  width: 90px;
-  height: auto;
-  margin-bottom: 8px;
+.hero p {
+  font-family: Georgia, "Times New Roman", serif;
+  margin: 0.5rem 0;
 }
 
 /* Start Button */
 .start-btn {
-  padding: 0.8rem 2.5rem;
+  padding: 0.8rem 2rem;
   font-weight: bold;
   border-radius: 50px;
+  font-family: Georgia, "Times New Roman", serif;
   transition: transform 0.3s, box-shadow 0.3s;
+  width: 150px;      /* Fixed width on desktop */
+  max-width: 80%;    /* Shrinks on smaller screens */
 }
 
 .start-btn:hover {
@@ -97,47 +98,38 @@ body.dark-mode {
   display: none;
 }
 
-/* Mobile tweaks */
-@media (max-width:576px){
-  .hero{ padding: 1rem; }
-  .start-btn{ width:100%; }
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .start-btn {
+    width: 40%;       /* Mobile-friendly width */
+    padding: 0.6rem 1.5rem;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- Fixed School Logo -->
+<img src="logo.png" id="logo-fixed" alt="School Logo">
+
 <!-- Dark Mode Toggle -->
-<div class="text-end p-3">
-  <button id="darkToggle" class="btn btn-outline-light btn-sm">
-    <i class="bi bi-moon-stars"></i> Dark Mode
-  </button>
-</div>
+<button id="darkToggle" class="btn btn-outline-light btn-sm">
+  <i class="bi bi-moon-stars"></i> Dark Mode
+</button>
 
 <!-- Hero Section -->
 <header class="hero">
-
-  <!-- School Logo -->
-  <img src="logo.png" class="school-logo" alt="School Logo">
-
-  <!-- School Name -->
   <h1 class="fw-bold mt-2">AWOLIA-MSS</h1>
-
-  <!-- Welcome Message -->
-  <p class="lead mb-1">Empowering Education, Inspiring Futures</p>
-
+  <p>Teachers are the mentors of tomorrow's leaders.</p>
 </header>
 
 <!-- Main Section -->
 <main class="container text-center my-3">
   <a id="startBtn"
      href="https://script.google.com/macros/s/AKfycbyaEvceSgS2v6zQYvbBCa2aPxOb8RlD06eSqDWvWL0rSVZYAtxYkzw5e5FLRnTAlOWo/exec"
-     class="btn btn-info start-btn text-white">
-
-    <span class="btn-text">
-      Start
-    </span>
-
+     class="btn btn-info start-btn text-white d-block mx-auto">
+    <span class="btn-text">Start</span>
     <span class="spinner-border spinner-border-sm ms-2" role="status"></span>
   </a>
 </main>
@@ -151,21 +143,20 @@ const startBtn = document.getElementById("startBtn");
 const spinner = startBtn.querySelector(".spinner-border");
 const btnText = startBtn.querySelector(".btn-text");
 
-startBtn.addEventListener("click",()=>{
+startBtn.addEventListener("click", () => {
   spinner.style.display = "inline-block";
   btnText.textContent = "Loading...";
 });
 
 // ----- DARK MODE TOGGLE -----
 const toggle = document.getElementById("darkToggle");
-toggle.addEventListener("click",()=>{
+toggle.addEventListener("click", () => {
   document.body.classList.toggle("dark-mode");
   toggle.innerHTML =
     document.body.classList.contains("dark-mode")
       ? '<i class="bi bi-sun"></i> Light Mode'
       : '<i class="bi bi-moon-stars"></i> Dark Mode';
 });
-
 </script>
 
 </body>
