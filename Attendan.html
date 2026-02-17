@@ -2,6 +2,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   
+/* ---------- IMMEDIATE BACKGROUND ---------- */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+   font-family: Georgia, "Times New Roman", serif;
+  background: url("img1.png") center/cover no-repeat fixed;
+  color: #ffffff;
+  overflow-x: hidden;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background: linear-gradient(rgba(18,18,18,0.85), rgba(18,18,18,0.85)), 
+              url("img1.png") center/cover no-repeat fixed;
+  color: #ffffff;
+}
+
+/* Fixed circular logo at top-left */
+#logo-fixed {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #10b981;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+/* Dark Mode button */
+#darkToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  border: 1px solid white;
+}
+
+/* Hero Section */
+.hero {
+  background: rgba(1,14,9,0.5);
+  max-width: 500px;
+  margin: 7rem auto 1rem auto;
+  padding: 1rem;
+  text-align: center;
+
+  border-bottom: 1rem solid rgb(28,167,214);
+  border-right: 1rem solid rgb(214,56,28);
+  border-top: 1rem solid rgb(237,226,11);
+  border-left: 1rem solid rgb(37,210,18);
+  border-bottom-right-radius: 2rem;
+}
+
+.hero p {
+  font-family: Georgia, "Times New Roman", serif;
+  margin: 0.5rem 0;
+}
+
+/* Start Button */
+.start-btn {
+  padding: 0.8rem 2rem;
+  font-weight: bold;
+  border-radius: 50px;
+  font-family: Georgia, "Times New Roman", serif;
+  transition: transform 0.3s, box-shadow 0.3s;
+  width: 150px;      /* Fixed width on desktop */
+  max-width: 80%;    /* Shrinks on smaller screens */
+}
+
+.start-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(37, 96, 3, 0.3);
+}
+
+/* Spinner hidden initially */
+.spinner-border {
+  display: none;
+}
+
+/* Responsive tweaks */
+@media (max-width: 576px) {
+  .start-btn {
+    width: 40%;       /* Mobile-friendly width */
+    padding: 0.6rem 1.5rem;
+  }
+}
 <meta charset="UTF-8">
 <title>Awolia Muslim SS Portal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -92,3 +183,4 @@
 
 </body>
 </html>
+
