@@ -1,0 +1,345 @@
+
+
+/* ================= GENERAL ================= */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  overflow: hidden; /* no scroll */
+}
+
+/* ================= LAYOUT ================= */
+body {
+  display: flex;
+  flex-direction: column;
+    background-image: url('img1.png');
+     background-repeat: no-repeat;           /* Prevent the image from repeating */
+    background-size: cover;                 /* Make it cover the entire screen */
+    background-position: center;            /* Center the image */
+}
+.grade9{
+  background-image: url('img2.png');
+     background-repeat: no-repeat;           /* Prevent the image from repeating */
+    background-size: cover;                 /* Make it cover the entire screen */
+    background-position: center;            /* Center the image */
+}
+.grade10{
+  background-image: url('img3.png');
+     background-repeat: no-repeat;           /* Prevent the image from repeating */
+    background-size: cover;                 /* Make it cover the entire screen */
+    background-position: center;            /* Center the image */
+}
+.grade11{
+  background-image: url('img5.jpg');
+     background-repeat: no-repeat;           /* Prevent the image from repeating */
+    background-size: cover;                 /* Make it cover the entire screen */
+    background-position: center;            /* Center the image */
+}
+.grade12{
+  background-image: url('img.png');
+     background-repeat: no-repeat;           /* Prevent the image from repeating */
+    background-size: cover;                 /* Make it cover the entire screen */
+    background-position: center;            /* Center the image */
+}
+/* Navbar height fixed */
+.top-bar {
+   padding: 4px 0;
+  flex-shrink: 0;
+}
+
+
+/* ================= NAVBAR ================= */
+.top-bar {
+  background: #18a64a;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.top-bar9 {
+  background: #076c2a;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.top-bar10 {
+  background: #b5a305;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.top-bar11 {
+  background: #be0505;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.top-bar12 {
+  background: #180e9de4;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.4rem;
+  text-decoration: none;
+}
+
+.navbar-brand img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+/* ================= BUTTONS ================= */
+.nav-btn {
+  background: #1e88e5;
+  color: #fff;
+  border-radius: 12px;
+  padding: 6px 14px;
+   font-size: 0.85rem;
+  font-weight: 500;
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+
+.nav-btn:hover {
+  background: #1565c0;
+  color: #fff;
+}
+
+/* ================= DROPDOWN STYLE ================= */
+.dropdown-menu {
+  background: #05005c;
+  border: 2px solid #00ff88;
+  border-radius: 15px;
+  padding: 20px;
+  min-width: 200px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+.tab {
+  color: #fff;
+  padding: 5px 15px;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.dropdown-item {
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+.tab:hover {
+  padding: 5px 15px;
+  border-radius: 10px;
+  color: #000;
+   border: 3px solid  #00ff88;
+  transform: translateX(2px);
+}
+.dropdown-item:hover {
+  background: #00ff88;
+  color: #000;
+  transform: translateX(6px);
+}
+
+.dropdown.dropend .dropdown-menu {
+  margin-left: 1px !important;
+}
+
+/* ===== Hover dropdown (desktop only) ===== */
+@media (min-width: 992px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 0;
+  }
+}
+@media (max-width: 768px) {
+  .dropdown:hover .dropdown-menu {
+    display: block;
+    margin-top: 1px;
+    flex-direction: column;
+  }
+   .grade-menu {
+    position: relative;
+  }
+
+  .grade-menu .dropdown-menu {
+    top: 0;
+    left: 27%;
+    margin-left: 4px;   /* tiny gap */
+    display: flexbox;
+  }
+
+  .grade-menu:hover .dropdown-menu {
+    display: block;
+  }
+ }
+
+/* ================= CLOCK ================= */
+.clock-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: radial-gradient(circle at top, #1b5e20, #000);
+  border: 3px solid #ffb300;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(255,179,0,0.7);
+}
+
+#clock-time {
+  font-size: 1.2rem;
+}
+
+#clock-ampm {
+  font-size: 0.6rem;
+  color: #ffeb3b;
+}
+
+/* ================= HERO ================= */
+.hero {
+  background: url("ok.png") center/cover no-repeat;
+  flex: 1; /* takes remaining space */
+  background: url("ok.png") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+
+}
+
+.portal-box {
+font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+  border: 2px solid red;
+  border-radius: 15px;
+  padding: clamp(0.20rem, 1vw, 0.5rem);
+  margin: clamp(0.1rem, 1.5vw, 0.2rem) auto; 
+  max-width: 90%;
+  background-color: #200670;
+  color:rgb(239, 229, 229);
+}
+
+.portal-title {
+ font-family: Georgia, "Times New Roman", serif;
+  background: rgb(145, 249, 178);
+  text-align: center;
+  justify-content: center;
+  color: #1a1908;
+  font-weight: bold;
+  padding: 0px;
+  font-size: 40px; /* 📱 small devices */
+   
+}
+
+/* ================= FOOTER ================= */
+footer {
+background: rgb(17, 90, 40); /* dark green as requested */
+  color: #fff;
+    flex-shrink: 0;
+  padding: 4px 6px;      /* smaller padding */
+  margin: 0;           /* no margin */
+  text-align: center;
+  font-size: 0.75rem;  /* slightly smaller text */
+}
+
+
+/* ================= MOBILE ================= */
+.navbar-toggler {
+    border: 2px solid #f2f2f2;   /* dark white border */
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.navbar-toggler-icon {
+  filter: invert(92%);        /* dark white lines */
+  width: 1.5em;
+  height: 1.5em;
+
+}
+
+/* ===== RESPONSIVE TEXT (MOBILE) ===== */
+@media (max-width: 576px) {
+
+  .portal-title {
+    font-size: 1.0rem;
+  }
+  
+
+  .portal-box {
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
+    padding: 0.25rem;
+    margin: 0.5rem auto;
+  }
+  } 
+
+@media (max-width: 768px) {
+  .portal-title {
+    font-size: 1.1rem;
+  }
+}
+/* ===== Reduce portal-box padding on small devices ===== */
+@media (max-width: 576px) {
+  .portal-box {
+    padding: 8px 10px;  /* smaller padding for phones */
+  }
+}
+
+.contact-info {
+  background: rgb(17, 90, 40); /* dark green as requested */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2px;
+  flex-wrap: wrap; 
+    /*font-family: 'Courier New', Courier, monospace; */
+}
+
+.marquee-container {
+   background: rgba(14, 78, 126, 0.7); 
+  width: 90%;
+  height: 26px;               /* fixed small height */
+  overflow: hidden;
+  border: 2px solid #7bff00;
+  border-radius: 10px;
+  flex-shrink: 0;
+    text-align: center;
+    margin-left: 10px;
+    scrollamount:2;
+}
+
+.marquee-container marquee {
+  line-height: 26px;
+}
+
+.marquee-container h1 {
+  font-size: 1rem;
+  color: #fbd203;
+  font-weight: bold;
+  margin: 0;
+
+}
+@media (max-width: 360px) {
+  .contact-info {
+    display: none;
+  }
+}
+
+
+
+
+
