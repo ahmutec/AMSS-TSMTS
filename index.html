@@ -2,195 +2,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <style>
-/* ---------- IMMEDIATE BACKGROUND ---------- */
-
-
-/* Dark Mode */
-body.dark-mode {
-  background: linear-gradient(rgba(18,18,18,0.85), rgba(18,18,18,0.85)), 
-              url("img1.png") center/cover no-repeat fixed;
-  color: #ffffff;
-}
-
-/* Fixed circular logo at top-left */
-#logo-fixed {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #10b981;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-}
-
-/* Dark Mode button */
-#darkToggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 1000;
-  border: 1px solid white;
-}
-
-/* Hero Section */
-.hero {
-  background: rgba(1,14,9,0.5);
-  max-width: 500px;
-  margin: 7rem auto 1rem auto;
-  padding: 1rem;
-  text-align: center;
-
-  border-bottom: 1rem solid rgb(28,167,214);
-  border-right: 1rem solid rgb(214,56,28);
-  border-top: 1rem solid rgb(237,226,11);
-  border-left: 1rem solid rgb(37,210,18);
-  border-bottom-right-radius: 2rem;
-}
-
-.hero p {
-  font-family: Georgia, "Times New Roman", serif;
-  margin: 0.5rem 0;
-}
-
-/* Spinner hidden initially */
-.spinner-border {
-  display: none;
-}
-
-/* Responsive tweaks */
-@media (max-width: 576px) {
-  .start-btn {
-    width: 40%;       /* Mobile-friendly width */
-    padding: 0.6rem 1.5rem;
-  }
-} </style>
 <meta charset="UTF-8">
-<title>Awolia School Attendance</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Bootstrap 5 -->
+<title>Awolia School Attendance</title>
+<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-   <link rel="stylesheet" href="styles.css">
+ <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="grade9" <stayle= "background: url("img1.png")>
+<body>
 
 <!-- ================= NAVBAR ================= -->
 <nav class="navbar navbar-expand-lg top-bar9">
   <div class="container">
-
-    <!-- Logo -->
     <a class="navbar-brand" href="#">
       <img src="logo.png" alt="Logo">
-      AWOLIA-MSS Teacher Secure Login page
+      AWOLIA-MSS Teacher Secure Login Page
     </a>
 
-    <!-- Hamburger -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Menu -->
-     
     <div class="collapse navbar-collapse justify-content-center" id="mainMenu">
-      <div class="d-flex flex-column flex-lg-row gap-2">
-
-<div class="dropdown grade-menu">
-          <button class="btn nav-btn ">
-            <a class="tab nav-link active" href="index.html">Home</a>
-          </button>
-   </div>
-   <div class="dropdown grade-menu">
-         <button class="btn nav-btn ">
-            <a class="tab nav-link active" href="https://script.google.com/macros/s/AKfycbyaEvceSgS2v6zQYvbBCa2aPxOb8RlD06eSqDWvWL0rSVZYAtxYkzw5e5FLRnTAlOWo/exec"
+      <div class="d-flex gap-2 mt-3">
+        <a class="btn nav-btn" href=" https://awolia-mss.netlify.app/">Home</a>
+         <a class="btn nav-btn" href="https://script.google.com/macros/s/AKfycbyaEvceSgS2v6zQYvbBCa2aPxOb8RlD06eSqDWvWL0rSVZYAtxYkzw5e5FLRnTAlOWo/exec"
    >Marklist</a>
-          </button>
-   </div>
-          <div class="dropdown grade-menu">
-         <button class="btn nav-btn ">
-            <a class="tab nav-link active" href="https://script.google.com/macros/s/AKfycbwaYbsJ91Rz2N-lVlZxAnEDTYgX5z8gurv-Sc5qgdTgf62peaXnZ0s7awuuUrGFDDqP/exec"
+        <a class="btn nav-btn"  href="https://script.google.com/macros/s/AKfycbwaYbsJ91Rz2N-lVlZxAnEDTYgX5z8gurv-Sc5qgdTgf62peaXnZ0s7awuuUrGFDDqP/exec"
    >Attendance</a>
-          </button>
-   </div>
-        <!-- <div class="dropdown grade-menu " >
-          <button class="btn nav-btn dropdown-toggle" data-bs-toggle="dropdown">
-            Attendance
-          </button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="https://script.google.com/macros/s/AKfycbwaYbsJ91Rz2N-lVlZxAnEDTYgX5z8gurv-Sc5qgdTgf62peaXnZ0s7awuuUrGFDDqP/exec">Grade-9</a></li>
-            <li><a class="dropdown-item" href="https://script.google.com/macros/s/AKfycbyqUo38VVJW2hltT3WzjwkVLNSpVWncr7pJPq93sCwZSWVK2_Y13AZOxVP81lhWyo6NRg/exec">Grade-10</a></li>
-            <li><a class="dropdown-item" href="https://script.google.com/macros/s/AKfycbymMHhWL0qouUUKTZDSv82smwpDAK8I4zjV6NKQpFTvYum-MQMN_i2gKS-W0skOgXpUaA/exec">Grade-11</a></li>
-            <li><a class="dropdown-item" href="https://script.google.com/macros/s/AKfycbxanf-mb5gNtZ_rWpAwyT6MtrGr0FF9NiAzRqUYdfSmaLhiS7ckH5-gSwQYcabo1orVhQ/exec">Grade-12</a></li>
-           
-         
-            
-          </ul>
-        </div> -->
-
-    
+   <a class="btn nav-btn" href="index.html">Back</a>
+       
       </div>
     </div>
- 
+  </div>
 </nav>
 
-   <div class="portal-title">
-    <h2>“Hi Teacher! You are the seed of endless possibilities; make yourself the inspiration that students remember.”</h2>
-      </div>
+<!-- ================= TITLE ================= -->
+<div class="portal-title">
+  “Hi Teacher! You are the seed of endless possibilities; make yourself the inspiration that students remember.”
+</div>
+
 <!-- ================= CONTENT ================= -->
 <section class="hero">
   <div class="portal-box">
- <h1> Hi Teacher This is Your Portal</h1>
+    <h1>Welcome, Teacher! This is your portal.</h1>
   </div>
 </section>
 
 <!-- ================= FOOTER ================= -->
 <footer>
-  © 2024 Ahmu-Tec| Academic Portal
+  © 2024 Ahmu-Tec | Academic Portal
   <div class="contact-info">
-        <p><i class="fas fa-phone"></i> Phone: +251 912 66 87 87</p>
-        <p><i class="fas fa-envelope"></i> Email: abuhanifa0915@gmail.com</p>
-
-      </div>
+    <p><i class="fas fa-phone"></i> +251 912 66 87 87</p>
+    <p><i class="fas fa-envelope"></i> abuhanifa0915@gmail.com</p>
+  </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-// ----- START BUTTON SPINNER -----
-const startBtn = document.getElementById("startBtn");
-const spinner = startBtn.querySelector(".spinner-border");
-const btnText = startBtn.querySelector(".btn-text");
 
-startBtn.addEventListener("click", () => {
-  spinner.style.display = "inline-block";
-  btnText.textContent = "Loading...";
-});
-
-// ----- DARK MODE TOGGLE -----
-const toggle = document.getElementById("darkToggle");
-toggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-  toggle.innerHTML =
-    document.body.classList.contains("dark-mode")
-      ? '<i class="bi bi-sun"></i> Light Mode'
-      : '<i class="bi bi-moon-stars"></i> Dark Mode';
-});
-</script>
 </body>
 </html>
-
-
-
-
-
-
-
 
 
 
