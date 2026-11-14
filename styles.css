@@ -1,16 +1,15 @@
-
 /* ================= GENERAL ================= */
 html, body {
   height: 100%;
   margin: 0;
   font-family: system-ui, sans-serif;
-    overflow: hidden; 
+  overflow: hidden;
 }
 
 body {
   display: flex;
   flex-direction: column;
- background: url("https://raw.githubusercontent.com/ahmutec/AMSS-TSMTS/main/img1.png") no-repeat center center fixed;
+  background: url("https://raw.githubusercontent.com/ahmutec/AMSS-TSMTS/main/img1.png") no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -23,7 +22,7 @@ body {
 }
 
 .navbar-brand {
-    margin-top: auto;
+  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -54,6 +53,34 @@ body {
   color: #fff;
 }
 
+/* ================= MARKLIST DROPDOWN ================= */
+.dropdown-menu {
+  border-radius: 12px;
+  min-width: 140px;
+  padding: 6px;
+  z-index: 2000;            /* ከ navbar (1000) በላይ እንዲታይ */
+}
+
+.dropdown-menu .dropdown-item {
+  color: #1565c0;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 8px;
+  padding: 8px 16px;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+  background: #1e88e5;
+  color: #fff;
+}
+
+.nav-btn.show,
+.nav-btn:focus {
+  background: #1565c0;
+  color: #fff;
+}
+
 /* ================= TITLE ================= */
 .portal-title {
   font-family: Georgia, "Times New Roman", serif;
@@ -63,7 +90,7 @@ body {
   color: #1a1908;
   font-weight: bold;
   padding: 0px;
-  font-size: 40px; /* 📱 small devices */
+  font-size: 40px;
 }
 
 /* ================= HERO ================= */
@@ -73,28 +100,21 @@ body {
   align-items: center;
   justify-content: center;
   padding: 10px;
-  
 }
 
 .portal-box {
   font-family: Georgia, serif;
- border-bottom: 1rem solid rgb(28,167,214);
+  border-bottom: 1rem solid rgb(28,167,214);
   border-right: 1rem solid rgb(214,56,28);
   border-top: 1rem solid rgb(237,226,11);
   border-left: 1rem solid rgb(37,210,18);
   border-bottom-right-radius: 2rem;
-  padding: 15px;
- 
   color: #fff;
-  text-align: center;
-
-
-background: rgba(1,14,9,0.5);
+  background: rgba(1,14,9,0.5);
   margin: 7rem auto 1rem auto;
   padding: 1rem;
   text-align: center;
   max-width: 500px;
-
 }
 
 /* ================= FOOTER ================= */
