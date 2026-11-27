@@ -12,6 +12,41 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <link rel="stylesheet" href="styles.css">
+
+<style>
+  /* STA sub-menu: opens to the right, top-aligned with STA */
+  .dropdown-submenu { position: relative; }
+
+  .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin: 0;
+  }
+
+  /* Arrow pointing right */
+  .dropdown-submenu > .dropdown-toggle::after {
+    float: right;
+    margin-top: .5em;
+    transform: rotate(-90deg);
+  }
+
+  /* Show on click */
+  .dropdown-submenu.show > .dropdown-menu { display: block; }
+
+  /* Show on hover (desktop only) */
+  @media (min-width: 992px) {
+    .dropdown-submenu:hover > .dropdown-menu { display: block; }
+  }
+
+  /* Mobile: open below STA inside the list, no overlap */
+  @media (max-width: 991.98px) {
+    .dropdown-submenu > .dropdown-menu {
+      position: static;
+      margin-left: 1rem;
+      border: 0;
+    }
+  }
+</style>
 </head>
 
 <body>
@@ -33,16 +68,28 @@
 
         <a class="btn nav-btn" href="https://awolia-mss.netlify.app/">Home</a>
         <a class="btn nav-btn" href="https://script.google.com/macros/s/AKfycbwaYbsJ91Rz2N-lVlZxAnEDTYgX5z8gurv-Sc5qgdTgf62peaXnZ0s7awuuUrGFDDqP/exec">Marklist</a>
+
         <!-- Attendance dropdown -->
         <div class="dropdown">
           <a class="btn nav-btn dropdown-toggle" href="#" role="button"
              data-bs-toggle="dropdown" aria-expanded="false">Attendance</a>
+
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="https://w3school.com" target="_blank" rel="noopener">STA</a></li>
+
+            <!-- STA with sub-menu -->
+            <li class="dropdown-submenu">
+              <a class="dropdown-item dropdown-toggle" href="#">STA</a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="stag9.html">Grade-9</a></li>
+                <li><a class="dropdown-item" href="stag10.html">Grade-10</a></li>
+                <li><a class="dropdown-item" href="stag11.html">Grade-11</a></li>
+                <li><a class="dropdown-item" href="stag12.html">Grade-12</a></li>
+              </ul>
+            </li>
+
             <li><a class="dropdown-item" href="hrt.html" target="_blank" rel="noopener">HRTA</a></li>
           </ul>
         </div>
-
 
         <a class="btn nav-btn" href="index.html">Back</a>
 
@@ -73,6 +120,26 @@
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // Click on STA toggles its sub-menu
+  document.querySelectorAll('.dropdown-submenu > a').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation(); // keep the Attendance menu open
+      el.parentElement.classList.toggle('show');
+    });
+  });
+
+  // Reset sub-menu when Attendance menu closes
+  document.querySelectorAll('.dropdown').forEach(function (d) {
+    d.addEventListener('hidden.bs.dropdown', function () {
+      d.querySelectorAll('.dropdown-submenu.show').forEach(function (s) {
+        s.classList.remove('show');
+      });
+    });
+  });
+</script>
 
 </body>
 </html>
