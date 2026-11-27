@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Control</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+*,*::before,*::after{box-sizing:border-box;}
+
+/* Fluid responsive: ሁሉም መጠኖች በ rem ናቸው */
+html{
+    -webkit-text-size-adjust:100%;
+    font-size:clamp(16px, 0.5vw + 12px, 22px);
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    min-height:100dvh;
+    padding:clamp(8px, 2vw, 32px);
+    font-family:Arial, sans-serif;
+    font-size:1rem;
+    background:url('https://wallpaperaccess.com/full/448244.jpg') center/cover fixed no-repeat;
+    overflow-x:hidden;
+}
+
+.main-container{
+    width:100%;
+    max-width:36rem;
+    min-width:0;
+    margin:0 auto;
+    background:#088364;
+    border-radius:1.25rem;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    padding:clamp(16px, 3vw, 40px);
+    color:#fff;
+    transition:max-width .25s ease;
+}
+.main-container.wide{max-width:76rem;}
+
+h3,h5{
+    margin:0 0 .9rem;
+    padding-bottom:.4rem;
+    border-bottom:2px solid #93c5fd;
+}
+h3{font-size:clamp(1.3rem, 1rem + 1vw, 1.9rem);}
+h5{font-size:clamp(1.05rem, .9rem + .5vw, 1.35rem);}
+h4{font-size:1.15rem;}
+
+.form-group{margin-bottom:1rem;}
+
+input,select,textarea{
+    width:100%;
+    padding:.65rem .8rem;
+    margin:.3rem 0;
+    font-size:1rem;
+    border-radius:.75rem;
+    border:2px solid #b51d71;
+}
+
+input[readonly]{
+    background:#e0f2fe;
+    color:#084177;
+    font-weight:bold;
+}
+
+textarea{
+    min-height:5rem;
+    resize:vertical;
+}
+
+button{
+    width:100%;
+    padding:.65rem;
+    margin-top:.5rem;
+    border:solid 3px #1297bd;
+    border-radius:1.25rem;
+    font-size:1.05rem;
+    background:#084177;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    background:#00ffff;
+    color:#000;
+    transform:scale(1.02);
+}
+
+button:disabled,
+button.processing{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+    background:#3b82f6;
+    color:#fff;
+}
+
+.btn-inline{
+    width:auto;
+    display:inline-block;
+    margin:0;
+    padding:.4rem .9rem;
+    font-size:.9rem;
+    border-radius:1rem;
+}
+
+.auth-links{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:.5rem .65rem;
+    margin-top:.8rem;
+    font-size:.9rem;
+}
+
+.navbar-toggler{
+    width:auto;
+    margin-top:0;
+    border:2px solid rgba(255,255,255,.6);
+    border-radius:.65rem;
+    background:transparent;
+}
+.navbar-toggler:hover{
+    background:rgba(255,255,255,.15);
+    transform:none;
+}
+.navbar-toggler-icon{filter:invert(1);}
+
+.toggle-form,a{
+    color:lightgreen;
+    cursor:pointer;
+    text-decoration:none;
+    font-size:.9rem;
+}
+
+.toggle-form{margin-top:.8rem;display:inline-block;}
+
+.toggle-form:hover,
+a:hover{
+    background:#001f4d;
+    border-radius:.65rem;
+}
+
+.loading{
+    display:none;
+    text-align:center;
+    margin:.6rem 0;
+}
+
+.spinner{
+    width:18px;
+    height:18px;
+    border:3px solid #eee;
+    border-top:5px solid #3498db;
+    border-radius:50%;
+    display:inline-block;
+    vertical-align:middle;
+    animation:spin 1s linear infinite;
+    margin-right:8px;
+}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.navbar{
+    border-radius:1rem;
+    padding:.5rem .75rem;
+    margin-bottom:1rem;
+    background:linear-gradient(135deg,#0f2027 0%,#203a43 50%,#2c5364 100%);
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+    border:1px solid rgba(255,255,255,.15);
+}
+
+.navbar-brand{
+    font-weight:bold;
+    color:#ffd700;
+    font-size:1.1rem;
+}
+
+.navbar .nav-link{
+    color:#e0f2fe;
+    font-weight:600;
+    font-size:.95rem;
+    letter-spacing:.3px;
+    padding:.5rem 1rem;
+    margin:.2rem .25rem;
+    border-radius:1.25rem;
+    border:2px solid transparent;
+    cursor:pointer;
+    transition:all .3s ease;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus{
+    color:#fff;
+    background:linear-gradient(135deg,#f7971e,#ff512f);
+    border-color:rgba(255,255,255,.6);
+    transform:translateY(-2px);
+    box-shadow:0 4px 12px rgba(255,81,47,.5);
+}
+
+.navbar .nav-link.active{
+    color:#fff;
+    background:linear-gradient(135deg,#11998e,#38ef7d);
+    box-shadow:0 4px 12px rgba(56,239,125,.45);
+}
+
+#reportResult, #searchResult, #updateSearchResult, #updateResult,
+#loginResult, #registerResult, #forgotResult{
+    overflow-x:auto;
+    word-break:break-word;
+    margin-top:.6rem;
+    max-width:100%;
+}
+
+#markSection, #searchSection, #reportSection, #updateSection{
+    margin:.6rem auto;
+    padding:.6rem;
+    width:100%;
+}
+
+.field-label{
+    display:block;
+    font-size:.85rem;
+    margin:.5rem 0 0;
+    color:#bfdbfe;
+}
+
+/* Multi-month checkboxes */
+.month-checks{display:flex;flex-wrap:wrap;gap:.4rem .5rem;margin:.4rem 0 .6rem;}
+.month-check{
+    display:inline-flex;
+    align-items:center;
+    gap:.4rem;
+    padding:.3rem .7rem;
+    border:2px solid #93c5fd;
+    border-radius:1rem;
+    cursor:pointer;
+    font-size:.9rem;
+}
+.month-check input{width:auto;margin:0;padding:0;accent-color:#38ef7d;}
+
+@media (max-width:991px){
+    .navbar .nav-link{text-align:center;margin:.25rem 0;}
+}
+
+@media (min-width:992px){
+    .select-panel{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:0 1.5rem;
+    }
+    .select-panel .select-col{min-width:0;}
+    #markSection, #searchSection, #reportSection, #updateSection{max-width:60rem;}
+    textarea{min-height:7rem;}
+}
+
+@media (max-width:400px){
+    .main-container{border-radius:1rem;}
+    #markSection, #searchSection, #reportSection, #updateSection{padding:.25rem;}
+}
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- ===== LOGIN PAGE ===== -->
+    <div id="loginPage">
+        <h3>Teacher Login</h3>
+        <div class="form-group">
+            <select id="loginSection" onchange="onLoginIdentityChange()"><option value="">Select Section</option></select>
+            <input type="text" id="teacherCode" placeholder="Enter Teacher Code" autocomplete="username"
+                   oninput="onLoginIdentityChange()" required>
+            <input type="password" id="teacherPassword" placeholder="Enter Password" autocomplete="current-password"
+                   onkeydown="if(event.key==='Enter'){loginTeacher(document.getElementById('loginBtn'));}" required>
+        </div>
+        <button id="loginBtn" onclick="loginTeacher(this)">Login</button>
+        <div class="loading" id="loginLoading"><span class="spinner"></span>Processing...</div>
+        <div class="auth-links justify-content-center">
+            <button type="button" class="btn-inline ms-2" onclick="showRegisterPage()">Register here</button>
+            <button type="button" class="btn-inline me-2" onclick="showForgotPage()">Forgot password</button>
+        </div>
+        <div id="loginResult"></div>
+    </div>
+
+    <!-- ===== REGISTER PAGE ===== -->
+    <div id="registerPage" class="d-none">
+        <h3>Register New Teacher</h3>
+        <div class="form-group">
+            <select id="regSection" onchange="lookupSubject()"><option value="">Select Section</option></select>
+            <input type="text" id="regCode" placeholder="Enter Teacher Code (given by admin)" onchange="lookupSubject()">
+            <label class="field-label" for="regSubject">Subject (auto-filled from the code)</label>
+            <input type="text" id="regSubject" placeholder="Subject" readonly>
+            <input type="email" id="newEmail" placeholder="Enter Email">
+            <input type="password" id="newPassword" placeholder="Enter Password">
+            <input type="password" id="confirmPassword" placeholder="Confirm Password">
+        </div>
+        <button onclick="registerTeacher(this)">Register</button>
+        <div class="loading" id="registerLoading"><span class="spinner"></span>Processing...</div>
+        <div class="toggle-form" onclick="showLoginPage()">Back to Login</div>
+        <div id="registerResult"></div>
+    </div>
+
+    <!-- ===== FORGOT PASSWORD PAGE ===== -->
+    <div id="forgotPage" class="d-none">
+        <h3>Reset Forgotten Password / Change Subject</h3>
+
+        <div id="forgotStep1">
+            <div class="form-group">
+                <select id="forgotSection" onchange="loadResetSubjects()"><option value="">Select Section</option></select>
+                <input type="text" id="forgotId" placeholder="Enter your Email or Teacher Code">
+            </div>
+            <button onclick="sendResetCode(this)">Send verification code</button>
+            <div class="loading" id="forgotLoading"><span class="spinner"></span>Processing...</div>
+        </div>
+
+        <div id="forgotStep2" class="d-none">
+            <div class="form-group">
+                <input type="text" id="resetOtp" placeholder="Verification code (from email)" inputmode="numeric">
+                <input type="password" id="resetPassword" placeholder="New Password (optional)">
+                <input type="password" id="resetConfirm" placeholder="Confirm New Password">
+                <select id="resetSubject"><option value="">New Subject (optional)</option></select>
+            </div>
+            <button onclick="saveReset(this)">Save changes</button>
+            <div class="loading" id="resetLoading"><span class="spinner"></span>Processing...</div>
+        </div>
+
+        <div class="toggle-form" onclick="showLoginPage()">Back to Login</div>
+        <div id="forgotResult"></div>
+    </div>
+
+    <!-- ===== HOME PAGE ===== -->
+    <div id="homePage" class="d-none">
+
+        <nav class="navbar navbar-expand-lg rounded mb-2">
+            <div class="container-fluid">
+                <div class="navbar-brand" id="sectionLabel"></div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainMenu">
+                    <ul class="navbar-nav ms-auto justify-content-center">
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('markSection')">Attendance</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('searchSection')">Search</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('reportSection')">Report</a></li>
+                        <li class="nav-item"><a class="nav-link" onclick="showSection('updateSection')">Update</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- SELECT SUBJECT & MONTH -->
+        <div class="p-3 mb-3 select-panel">
+            <div class="select-col">
+                <h5>Select Subject</h5>
+                <select id="subjectSelect" onchange="loadDatesForSubject()">
+                    <option value="">Select Subject</option>
+                </select>
+                <div class="loading" id="subjectLoading"><span class="spinner"></span>Processing...</div>
+            </div>
+
+            <div class="select-col">
+                <h5 class="mt-3 mt-lg-0">Select Month</h5>
+                <select id="monthSelect" onchange="onMonthChange()">
+                    <option value="">Select Month</option>
+                </select>
+                <div class="loading" id="datesLoading"><span class="spinner"></span>Processing...</div>
+            </div>
+        </div>
+
+        <!-- MARK ATTENDANCE -->
+        <div id="markSection">
+            <h5>Mark Attendance</h5>
+            <div class="form-group">
+                <select id="dateInput"><option value="">Select Day</option></select>
+                <textarea id="attendanceInput" placeholder="ምሳሌ: (1,3,5,6)=X,(2)=P  ወይም  (4,7)=A,(2)=S ብለው ያስገቡ። "></textarea>
+            </div>
+            <button onclick="markAttendance(this)">Mark Attendance</button>
+            <div class="loading" id="markLoading"><span class="spinner"></span>Processing...</div>
+        </div>
+
+        <!-- SEARCH STUDENT -->
+        <div id="searchSection" class="d-none">
+            <h5>Search Student</h5>
+            <div class="form-group">
+                <input type="text" id="searchRoll" placeholder="Enter Roll Number">
+            </div>
+            <button onclick="searchStudent(this)">Search</button>
+            <div class="loading" id="searchLoading"><span class="spinner"></span>Processing...</div>
+            <div id="searchResult"></div>
+        </div>
+
+        <!-- REPORT -->
+        <div id="reportSection" class="d-none">
+            <h5>Attendance Report</h5>
+            <div class="form-group">
+                <select id="dateFilter"><option value="">Select Day</option></select>
+            </div>
+            <button onclick="showAbsentByDate(this)">Show Attendance by Day</button>
+            <div class="loading" id="reportLoading"><span class="spinner"></span>Processing...</div>
+
+            <button onclick="showMonthlyReport(this)">Show Monthly Report (selected month)</button>
+            <div class="loading" id="monthlyLoading"><span class="spinner"></span>Processing...</div>
+
+            <h5 class="mt-4">Multi-month Report</h5>
+            <div class="month-checks" id="monthChecks"></div>
+            <button type="button" class="btn-inline" onclick="toggleAllMonths()">Select / unselect all</button>
+            <button onclick="showMultiMonthReport(this)">Show Report for Selected Months</button>
+            <div class="loading" id="multiLoading"><span class="spinner"></span>Processing...</div>
+
+            <h5 class="mt-4">Student Summary (by month)</h5>
+            <div class="form-group">
+                <input type="text" id="summaryRoll" placeholder="Enter Roll Number">
+            </div>
+            <div style="font-size:.85rem;color:#bfdbfe;">
+                ከላይ ባሉት Multi-month checkboxes ወራትን ይምረጡ፤ ምንም ካልመረጡ "Select Month" ላይ የተመረጠው ወር ይሰራል።
+            </div>
+            <button onclick="showStudentSummary(this)">Show Student Summary</button>
+            <div class="loading" id="summaryLoading"><span class="spinner"></span>Processing...</div>
+
+            <div id="reportResult"></div>
+
+            <button type="button" onclick="printReport()">🖨 Print Report</button>
+        </div>
+
+        <!-- UPDATE -->
+        <div id="updateSection" class="d-none">
+            <h5>Update Attendance</h5>
+            <div class="form-group">
+                <select id="updateDateInput"><option value="">Select Day</option></select>
+                <input type="text" id="updateRoll" placeholder="Enter Roll Number" required
+                       oninput="this.dataset.roll=''; this.dataset.date=''">
+            </div>
+            <button onclick="searchForUpdate(this)">Search</button>
+            <div class="loading" id="updateLoading"><span class="spinner"></span>Processing...</div>
+            <div id="updateSearchResult"></div>
+
+            <div class="form-group mt-3">
+                <select id="newStatus">
+                    <option value="">Select New Status</option>
+                    <option value="X">Present</option>
+                    <option value="L">Late</option>
+                    <option value="A">Absent</option>
+                    <option value="P">Permitted</option>
+                    <option value="S">Sick</option>
+                </select>
+            </div>
+            <button onclick="updateStudentAttendance(this)">Update</button>
+            <div class="loading" id="updateActionLoading"><span class="spinner"></span>Processing...</div>
+            <div id="updateResult"></div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+/* ★ Apps Script Web app URL (በ /exec የሚያልቅ) */
+const API_URL = "https://script.google.com/macros/s/AKfycbzH1xYIP_7QL20hJSwgiy5D_YlLRcvNqb2vGGjEnP5gVSuc40G6elHLBmOlBFiTQxR7/exec";
+
+/* ===================== API Layer (google.script.run ምትክ) ===================== */
+let apiSection = '';
+
+// ስህተቱ ምን እንደሆነ በግልጽ ለማሳየት (ለምሳሌ "Unknown function" ማለት Apps Script አዲስ version አልተሰማራም)
+function errText_(error) {
+    const msg = String(error && error.message ? error.message : error);
+    return msg.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+}
+
+function callServer(fn, args) {
+    return fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, // CORS preflight እንዳይኖር
+        body: JSON.stringify({ fn: fn, args: args, section: apiSection })
+    })
+    .then(r => r.json())
+    .then(j => {
+        if (!j.ok) throw new Error(j.error || 'Server error');
+        return j.result;
+    });
+}
+
+const google = {
+    script: {
+        get run() {
+            let ok = function () {}, fail = function () {};
+            const proxy = new Proxy({}, {
+                get(_, name) {
+                    if (name === 'withSuccessHandler') return f => { ok = f; return proxy; };
+                    if (name === 'withFailureHandler') return f => { fail = f; return proxy; };
+                    return (...args) => { callServer(name, args).then(ok).catch(fail); };
+                }
+            });
+            return proxy;
+        }
+    }
+};
+
+let authenticatedSubject = null;
+let authenticatedSection = '';
+let allDates = []; // [{date, day, month, marked}]
+
+/* ===================== Home data prefetch (ፈጣን ጅምር) ===================== */
+const HOME_CACHE_MS = 5 * 60 * 1000;
+let homeCache = { key: '', time: 0, promise: null };
+
+// Subjects + ወራት + ቀናት በአንድ ጥሪ። ተመሳሳይ ጥሪ ካለ (ትኩስ ከሆነ) እሱኑ ይመልሳል
+function prefetchHome(sectionName, subject) {
+    const key = sectionName + '|' + subject;
+    if (homeCache.promise && homeCache.key === key && (Date.now() - homeCache.time) < HOME_CACHE_MS) {
+        return homeCache.promise;
+    }
+    apiSection = sectionName;
+    const p = callServer('getHomeBundle', [subject]);
+    homeCache = { key: key, time: Date.now(), promise: p };
+    p.catch(() => {
+        if (homeCache.promise === p) homeCache = { key: '', time: 0, promise: null };
+    });
+    return p;
+}
+
+/* ===================== Loading Helpers ===================== */
+function showSpinner(id) { const el = document.getElementById(id); if (el) el.style.display = 'block'; }
+function hideSpinner(id) { const el = document.getElementById(id); if (el) el.style.display = 'none'; }
+
+function startLoading(button, loadingId) {
+    if (button) { button.disabled = true; button.classList.add('processing'); }
+    showSpinner(loadingId);
+}
+function stopLoading(button, loadingId) {
+    if (button) { button.disabled = false; button.classList.remove('processing'); }
+    hideSpinner(loadingId);
+}
+
+/* ================ Page Show/Hide ================ */
+function hideAuthPages() {
+    ['loginPage', 'registerPage', 'forgotPage'].forEach(id =>
+        document.getElementById(id).classList.add('d-none'));
+    document.querySelector('.main-container').classList.remove('wide');
+}
+
+function showLoginPage() {
+    hideAuthPages();
+    document.getElementById('loginPage').classList.remove('d-none');
+}
+
+function showRegisterPage() {
+    hideAuthPages();
+    document.getElementById('registerResult').innerHTML = '';
+    document.getElementById('registerPage').classList.remove('d-none');
+}
+
+function showForgotPage() {
+    hideAuthPages();
+    document.getElementById('forgotResult').innerHTML = '';
+    document.getElementById('forgotStep1').classList.remove('d-none');
+    document.getElementById('forgotStep2').classList.add('d-none');
+    document.getElementById('forgotPage').classList.remove('d-none');
+}
+
+function showHomePage() {
+    hideAuthPages();
+    document.querySelector('.main-container').classList.add('wide');
+    document.getElementById('homePage').classList.remove('d-none');
+    populateSubjects();
+    showSection('markSection');
+}
+
+// (የገጽ ክፍሎችን — Attendance / Search / Report / Update — ያሳያል)
+function showSection(sectionId) {
+    ['markSection','searchSection','reportSection','updateSection'].forEach(id => {
+        document.getElementById(id).classList.add('d-none');
+    });
+    document.getElementById(sectionId).classList.remove('d-none');
+
+    const menu = document.getElementById('mainMenu');
+    if (menu && menu.classList.contains('show')) {
+        bootstrap.Collapse.getOrCreateInstance(menu).hide();
+    }
+}
+
+/* ===================== Sections (ሴክሽኖች) Dropdown ===================== */
+const SECTION_SELECTS = ['loginSection', 'regSection', 'forgotSection'];
+
+function fillSelect(selectId, items, firstLabel) {
+    const sel = document.getElementById(selectId);
+    const prev = sel.value;
+    sel.innerHTML = '';
+    sel.add(new Option(firstLabel, ''));
+    items.forEach(name => sel.add(new Option(name, name)));
+    if (prev && items.indexOf(prev) !== -1) sel.value = prev;
+}
+
+function loadSections() {
+    apiSection = '';
+
+    // ከዚህ በፊት የተቀመጠ ዝርዝር ካለ ወዲያው ይታያል (server ሳይጠበቅ)
+    let cached = null;
+    try { cached = JSON.parse(localStorage.getItem('sections_cache') || 'null'); } catch (e) {}
+    if (cached && cached.length) {
+        SECTION_SELECTS.forEach(id => fillSelect(id, cached, 'Select Section'));
+    } else {
+        SECTION_SELECTS.forEach(id => fillSelect(id, [], 'Loading sections...'));
+    }
+
+    google.script.run
+        .withSuccessHandler(list => {
+            list = list || [];
+            SECTION_SELECTS.forEach(id => fillSelect(id, list, 'Select Section'));
+            try { localStorage.setItem('sections_cache', JSON.stringify(list)); } catch (e) {}
+        })
+        .withFailureHandler(error => {
+            console.error('Error loading sections:', error);
+            if (!(cached && cached.length)) {
+                SECTION_SELECTS.forEach(id => fillSelect(id, [], 'Select Section'));
+            }
+            document.getElementById('loginResult').innerHTML =
+                "Could not connect to the server. Check API_URL and the Web app deployment.";
+        })
+        .getSections();
+}
+
+/* ===================== Login ===================== */
+let loginLookupTimer = null;
+let loginLookupToken = 0;
+
+// ሴክሽን ወይም ኮድ ሲቀየር — ከጀርባ (ሳይታይ) Home ገጹን ያዘጋጃል
+function onLoginIdentityChange() {
+    clearTimeout(loginLookupTimer);
+    loginLookupToken++; // የቆየ ምላሽ ችላ እንዲባል
+    document.getElementById('loginResult').innerHTML = '';
+
+    const sectionName = document.getElementById('loginSection').value;
+    const code = document.getElementById('teacherCode').value.trim();
+    if (!sectionName || !code) return;
+
+    loginLookupTimer = setTimeout(lookupLoginSubject, 500);
+}
+
+function lookupLoginSubject() {
+    const sectionName = document.getElementById('loginSection').value;
+    const code = document.getElementById('teacherCode').value.trim();
+    if (!sectionName || !code) return;
+
+    apiSection = sectionName;
+    const token = ++loginLookupToken;
+
+    google.script.run
+        .withSuccessHandler(info => {
+            if (token !== loginLookupToken) return;
+            // የተመዘገበ ኮድ እና Subject ካለው ብቻ ከጀርባ አዘጋጅ (ምንም አይታይም)
+            if (info.found && info.registered && info.subject) {
+                prefetchHome(sectionName, info.subject);
+            }
+        })
+        .withFailureHandler(error => {
+            console.error('Login prefetch error:', error);
+        })
+        .getCodeInfo(code);
+}
+
+function loginTeacher(button) {
+    const sectionName = document.getElementById('loginSection').value;
+    const code = document.getElementById('teacherCode').value.trim();
+    const password = document.getElementById('teacherPassword').value.trim();
+    const loading = 'loginLoading';
+    const resultDiv = document.getElementById('loginResult');
+
+    if (!sectionName || !code || !password) {
+        resultDiv.innerHTML = "Please select a section and enter both code and password";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+    apiSection = sectionName;
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            if (result.success) {
+                authenticatedSubject = result.subject;
+                authenticatedSection = sectionName;
+                document.getElementById('sectionLabel').textContent = sectionName;
+                showHomePage();
+            } else {
+                resultDiv.innerHTML = "Invalid code or password";
+            }
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Login error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .authenticateTeacher(code, password);
+}
+
+/* ===================== Register ===================== */
+let lookupToken = 0;
+
+// ኮዱን እና ሴክሽኑን ሲመርጥ — በ column E ያለው Subject በራሱ ይሞላል
+function lookupSubject() {
+    const sectionName = document.getElementById('regSection').value;
+    const code = document.getElementById('regCode').value.trim();
+    const subjectInput = document.getElementById('regSubject');
+    const resultDiv = document.getElementById('registerResult');
+
+    subjectInput.value = '';
+    resultDiv.innerHTML = '';
+    if (!sectionName || !code) return;
+
+    apiSection = sectionName;
+    const token = ++lookupToken;
+
+    google.script.run
+        .withSuccessHandler(info => {
+            if (token !== lookupToken) return; // የቆየ ምላሽ ችላ ይባላል
+            if (!info.found) { resultDiv.innerHTML = info.message; return; }
+            if (info.registered) { resultDiv.innerHTML = "This teacher code is already registered. Please login."; return; }
+            subjectInput.value = info.subject || '';
+            if (!info.subject) resultDiv.innerHTML = "No subject is assigned to this code yet. Please contact the administrator.";
+        })
+        .withFailureHandler(error => {
+            if (token !== lookupToken) return;
+            console.error('Lookup error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .getCodeInfo(code);
+}
+
+function registerTeacher(button) {
+    const sectionName = document.getElementById('regSection').value;
+    const code = document.getElementById('regCode').value.trim();
+    const subject = document.getElementById('regSubject').value.trim();
+    const email = document.getElementById('newEmail').value.trim();
+    const password = document.getElementById('newPassword').value.trim();
+    const confirmPassword = document.getElementById('confirmPassword').value.trim();
+    const loading = 'registerLoading';
+    const resultDiv = document.getElementById('registerResult');
+
+    if (!sectionName || !code || !email || !password || !confirmPassword) {
+        resultDiv.innerHTML = "Please fill all fields";
+        return;
+    }
+    if (!subject) {
+        resultDiv.innerHTML = "Subject was not found for this code. Check the section and code.";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+    apiSection = sectionName;
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            if (result.success) {
+                document.getElementById('loginSection').value = sectionName;
+                document.getElementById('teacherCode').value = result.code;
+                document.getElementById('teacherPassword').value = '';
+                ['regCode','regSubject','newEmail','newPassword','confirmPassword'].forEach(id =>
+                    document.getElementById(id).value = '');
+                document.getElementById('regSection').value = '';
+                showLoginPage();
+                document.getElementById('loginResult').innerHTML = result.message + "<br>Please login.";
+                if (result.subject) prefetchHome(sectionName, result.subject);
+            } else {
+                resultDiv.innerHTML = result.message;
+            }
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Register error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .registerTeacher(code, email, password, confirmPassword);
+}
+
+/* ===================== Forgot Password ===================== */
+function loadResetSubjects() {
+    const sectionName = document.getElementById('forgotSection').value;
+    fillSelect('resetSubject', [], 'New Subject (optional)');
+    if (!sectionName) return;
+    apiSection = sectionName;
+
+    google.script.run
+        .withSuccessHandler(list => fillSelect('resetSubject', list || [], 'New Subject (optional)'))
+        .withFailureHandler(error => console.error('Error loading subjects:', error))
+        .getAllSubjects();
+}
+
+function sendResetCode(button) {
+    const sectionName = document.getElementById('forgotSection').value;
+    const id = document.getElementById('forgotId').value.trim();
+    const loading = 'forgotLoading';
+    const resultDiv = document.getElementById('forgotResult');
+
+    if (!sectionName || !id) {
+        resultDiv.innerHTML = "Please select a section and enter your email or teacher code";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+    apiSection = sectionName;
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result.message;
+            if (result.success) {
+                document.getElementById('forgotStep2').classList.remove('d-none');
+            }
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Forgot error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .requestPasswordReset(id);
+}
+
+function saveReset(button) {
+    const sectionName = document.getElementById('forgotSection').value;
+    const id = document.getElementById('forgotId').value.trim();
+    const otp = document.getElementById('resetOtp').value.trim();
+    const pw = document.getElementById('resetPassword').value.trim();
+    const confirm = document.getElementById('resetConfirm').value.trim();
+    const subj = document.getElementById('resetSubject').value.trim();
+    const loading = 'resetLoading';
+    const resultDiv = document.getElementById('forgotResult');
+
+    if (!sectionName || !id || !otp) {
+        resultDiv.innerHTML = "Please enter the verification code";
+        return;
+    }
+    if (!pw && !subj) {
+        resultDiv.innerHTML = "Enter a new password and/or a new subject";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+    apiSection = sectionName;
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            if (result.success) {
+                ['forgotId','resetOtp','resetPassword','resetConfirm','resetSubject'].forEach(i =>
+                    document.getElementById(i).value = '');
+                document.getElementById('loginSection').value = sectionName;
+                showLoginPage();
+                onLoginIdentityChange();
+                document.getElementById('loginResult').innerHTML = result.message;
+            } else {
+                resultDiv.innerHTML = result.message;
+            }
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Reset error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .resetTeacherAccount(id, otp, pw, confirm, subj);
+}
+
+/* ===================== Subjects, Months & Days ===================== */
+// ከ Login በኋላ — አስቀድሞ የተዘጋጀውን (prefetch) ይጠቀማል፣ ከሌለ በአንድ ጥሪ ያመጣል
+function populateSubjects() {
+    const subjectSelect = document.getElementById('subjectSelect');
+    const monthSelect = document.getElementById('monthSelect');
+    subjectSelect.disabled = true;
+    monthSelect.disabled = true;
+    showSpinner('subjectLoading');
+
+    apiSection = authenticatedSection;
+
+    prefetchHome(authenticatedSection, authenticatedSubject)
+        .then(bundle => {
+            apiSection = authenticatedSection;
+            subjectSelect.disabled = false;
+            monthSelect.disabled = false;
+            hideSpinner('subjectLoading');
+
+            const subjects = bundle.subjects || [];
+            subjectSelect.innerHTML = '<option value="">Select Subject</option>';
+            if (!subjects.length) {
+                subjectSelect.add(new Option("No subject found for your subject", ""));
+                return;
+            }
+            subjects.forEach(subject => subjectSelect.add(new Option(subject, subject)));
+
+            if (bundle.pick) {
+                subjectSelect.value = bundle.pick;
+                applyDates(bundle.dates || { months: [], dates: [] }, '', []);
+            }
+        })
+        .catch(error => {
+            subjectSelect.disabled = false;
+            monthSelect.disabled = false;
+            hideSpinner('subjectLoading');
+            console.error('Error loading subjects:', error);
+        });
+}
+
+function resetDaySelects() {
+    ['dateInput', 'dateFilter', 'updateDateInput'].forEach(id => {
+        document.getElementById(id).innerHTML = '<option value="">Select Day</option>';
+    });
+}
+
+// ወራት እና ቀናትን ወደ ገጹ ይሞላል
+function applyDates(data, prevMonth, keptChecks) {
+    const monthSelect = document.getElementById('monthSelect');
+    allDates = data.dates || [];
+    const months = data.months || [];
+
+    monthSelect.innerHTML = '<option value="">Select Month</option>';
+    months.forEach(m => monthSelect.add(new Option(m, m)));
+    if (prevMonth && months.includes(prevMonth)) monthSelect.value = prevMonth;
+    renderMonthChecks(months, keptChecks || []);
+    onMonthChange();
+}
+
+// keepMonth === true ከሆነ የተመረጠው ወር እና checkboxes እንደተመረጡ ይቆያሉ
+function loadDatesForSubject(keepMonth) {
+    const subject = document.getElementById('subjectSelect').value;
+    const monthSelect = document.getElementById('monthSelect');
+    const prevMonth = keepMonth === true ? monthSelect.value : '';
+    const keptChecks = keepMonth === true ? getCheckedMonths() : [];
+
+    allDates = [];
+    monthSelect.innerHTML = '<option value="">Select Month</option>';
+    document.getElementById('monthChecks').innerHTML = '';
+    resetDaySelects();
+    if (!subject) return;
+
+    monthSelect.disabled = true;
+    showSpinner('datesLoading');
+
+    google.script.run
+        .withSuccessHandler(data => {
+            monthSelect.disabled = false;
+            hideSpinner('datesLoading');
+            applyDates(data, prevMonth, keptChecks);
+        })
+        .withFailureHandler(error => {
+            monthSelect.disabled = false;
+            hideSpinner('datesLoading');
+            console.error('Error loading dates:', error);
+        })
+        .getAttendanceDates(subject);
+}
+
+// ወር ሲመረጥ የዚያ ወር ቀናት ብቻ ይመጣሉ (server አይጠራም)
+function onMonthChange() {
+    const month = document.getElementById('monthSelect').value;
+    resetDaySelects();
+    if (!month) return;
+
+    const dateInput = document.getElementById('dateInput');
+    const dateFilter = document.getElementById('dateFilter');
+    const updateDateInput = document.getElementById('updateDateInput');
+
+    allDates.filter(d => d.month === month).forEach(item => {
+        const label = `${item.day} (${item.date})`;
+        if (!item.marked) dateInput.add(new Option(label, item.date)); // ገና ያልተሞሉ ቀናት ብቻ
+        dateFilter.add(new Option(label, item.date));
+        updateDateInput.add(new Option(label, item.date));
+    });
+}
+
+/* ===================== Search Student ===================== */
+function searchStudent(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const roll = document.getElementById('searchRoll').value.trim();
+    const loading = 'searchLoading';
+    const resultDiv = document.getElementById('searchResult');
+
+    if (!subject || !roll) {
+        resultDiv.innerHTML = "Please select a subject and enter a roll number";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result;
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Search error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .searchStudent(subject, roll);
+}
+
+/* ===================== Mark Attendance ===================== */
+function markAttendance(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const date = document.getElementById('dateInput').value;
+    const input = document.getElementById('attendanceInput').value.trim();
+    const loading = 'markLoading';
+
+    if (!subject || !date || !input) {
+        alert("Please fill all fields (subject, month, day, attendance)");
+        return;
+    }
+
+    // (ቁጥሮች)=ፊደል — በአንድ መስመር ብዙ ቡድን ይፈቀዳል
+    const regex = /\(\s*([\d\s,]+?)\s*\)\s*=\s*([XLAPS])/gi;
+
+    const leftover = input.replace(regex, '').replace(/[\s,;]+/g, '');
+    if (leftover) {
+        alert("Invalid format. Example: (1,3,5,6)=X,(2)=P");
+        return;
+    }
+
+    const groups = { X: [], L: [], A: [], P: [], S: [] };
+    const seen = {};
+    const duplicates = [];
+    let m;
+
+    while ((m = regex.exec(input)) !== null) {
+        const status = m[2].toUpperCase();
+        m[1].split(',').map(r => r.trim()).filter(r => r).forEach(r => {
+            if (seen[r]) {
+                duplicates.push(r);
+            } else {
+                seen[r] = status;
+                groups[status].push(r);
+            }
+        });
+    }
+
+    if (Object.keys(seen).length === 0) {
+        alert("Invalid format. Example: (1,3,5,6)=X,(2)=P");
+        return;
+    }
+
+    if (duplicates.length) {
+        alert("These roll numbers are written more than once: " + duplicates.join(", "));
+        return;
+    }
+
+    // A ብቻ (ወይም ከ L/P/S ጋር) ከተጻፈ ያልተጻፉት Present (X)፤ አለበለዚያ Absent (A)
+    const hasPresent = groups.X.length > 0;
+    const hasAbsent = groups.A.length > 0;
+    const defaultStatus = (hasAbsent && !hasPresent) ? 'X' : 'A';
+
+    startLoading(button, loading);
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            alert(result);
+            if (String(result).indexOf('Attendance updated') === 0) {
+                // server እንደገና ሳይጠራ በ browser ላይ ብቻ ያድሳል
+                const item = allDates.find(d => d.date === date);
+                if (item) item.marked = true;
+                document.getElementById('attendanceInput').value = '';
+                onMonthChange();
+            }
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error(error);
+            alert("An error occurred. Try again.");
+        })
+        .markAttendance(subject, groups.X, groups.L, groups.A, groups.P, groups.S, date, defaultStatus);
+}
+
+/* ===================== Report ===================== */
+function showAbsentByDate(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const date = document.getElementById('dateFilter').value;
+    const loading = 'reportLoading';
+    const resultDiv = document.getElementById('reportResult');
+
+    if (!subject || !date) {
+        resultDiv.innerHTML = "Please select a subject, month and day";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result;
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Show attendance error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .getAbsentByDate(subject, date);
+}
+
+function showMonthlyReport(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const month = document.getElementById('monthSelect').value;
+    const loading = 'monthlyLoading';
+    const resultDiv = document.getElementById('reportResult');
+
+    if (!subject || !month) {
+        resultDiv.innerHTML = "Please select a subject and month";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result;
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Monthly report error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .getMonthlyReport(subject, month);
+}
+
+/* ---------- Multi-month report ---------- */
+function getCheckedMonths() {
+    return Array.from(document.querySelectorAll('#monthChecks input:checked')).map(cb => cb.value);
+}
+
+function renderMonthChecks(months, keep) {
+    const box = document.getElementById('monthChecks');
+    box.innerHTML = '';
+    months.forEach(m => {
+        const label = document.createElement('label');
+        label.className = 'month-check';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.value = m;
+        cb.checked = keep.indexOf(m) !== -1;
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(m));
+        box.appendChild(label);
+    });
+}
+
+function toggleAllMonths() {
+    const boxes = Array.from(document.querySelectorAll('#monthChecks input[type=checkbox]'));
+    const allOn = boxes.length > 0 && boxes.every(b => b.checked);
+    boxes.forEach(b => b.checked = !allOn);
+}
+
+function showMultiMonthReport(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const months = getCheckedMonths();
+    const loading = 'multiLoading';
+    const resultDiv = document.getElementById('reportResult');
+
+    if (!subject || !months.length) {
+        resultDiv.innerHTML = "Please select a subject and at least one month";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result;
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Multi-month report error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .getMultiMonthReport(subject, months);
+}
+
+/* ---------- Student summary ---------- */
+function showStudentSummary(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const roll = document.getElementById('summaryRoll').value.trim();
+    let months = getCheckedMonths();
+    if (!months.length) {
+        const m = document.getElementById('monthSelect').value;
+        if (m) months = [m];
+    }
+    const loading = 'summaryLoading';
+    const resultDiv = document.getElementById('reportResult');
+
+    if (!subject || !roll || !months.length) {
+        resultDiv.innerHTML = "Please select a subject, enter a roll number and select at least one month";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result;
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Student summary error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .getStudentMonthSummary(subject, roll, months);
+}
+
+/* ---------- Print ---------- */
+function printReport() {
+    const html = document.getElementById('reportResult').innerHTML.trim();
+    if (!html) {
+        alert("Nothing to print. Please show a report first.");
+        return;
+    }
+    const w = window.open('', '_blank');
+    if (!w) {
+        alert("Please allow pop-ups to print.");
+        return;
+    }
+    w.document.write(
+        '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Attendance Report</title>' +
+        '<style>' +
+        'body{font-family:Arial,sans-serif;padding:16px;color:#000;background:#fff}' +
+        'table{width:100%;border-collapse:collapse;font-size:13px}' +
+        'th,td{border:1px solid #444 !important;padding:4px 6px}' +
+        'tr{page-break-inside:avoid}' +
+        '@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}' +
+        '</style></head><body>' + html + '</body></html>'
+    );
+    w.document.close();
+    w.focus();
+    setTimeout(function () { w.print(); }, 400);
+}
+
+/* ===================== Update ===================== */
+function searchForUpdate(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const date = document.getElementById('updateDateInput').value;
+    const rollInput = document.getElementById('updateRoll');
+    const roll = rollInput.value.trim();
+    const loading = 'updateLoading';
+    const resultDiv = document.getElementById('updateSearchResult');
+
+    if (!subject || !date) {
+        resultDiv.innerHTML = "Please select a subject, month and day";
+        return;
+    }
+
+    startLoading(button, loading);
+
+    if (roll) {
+        google.script.run
+            .withSuccessHandler(result => {
+                stopLoading(button, loading);
+                resultDiv.innerHTML = `Student: ${result}`;
+                rollInput.dataset.roll = roll;
+                rollInput.dataset.date = date;
+            })
+            .withFailureHandler(error => {
+                stopLoading(button, loading);
+                console.error('Update search error:', error);
+                resultDiv.innerHTML = "An error occurred: " + errText_(error);
+            })
+            .getStudentAttendanceByDate(subject, roll, date);
+    } else {
+        google.script.run
+            .withSuccessHandler(result => {
+                stopLoading(button, loading);
+                resultDiv.innerHTML = result;
+            })
+            .withFailureHandler(error => {
+                stopLoading(button, loading);
+                console.error('Update search error:', error);
+                resultDiv.innerHTML = "An error occurred: " + errText_(error);
+            })
+            .getAbsentByDate(subject, date);
+    }
+}
+
+function updateStudentAttendance(button) {
+    const subject = document.getElementById('subjectSelect').value;
+    const date = document.getElementById('updateDateInput').value;
+    const rollInput = document.getElementById('updateRoll');
+    const roll = rollInput.dataset.roll || rollInput.value.trim();
+    const newStatus = document.getElementById('newStatus').value;
+    const loading = 'updateActionLoading';
+    const resultDiv = document.getElementById('updateResult');
+
+    if (!subject || !date || !roll || !newStatus) {
+        resultDiv.innerHTML = "Please search for a student and select a new status";
+        return;
+    }
+
+    startLoading(button, loading);
+    resultDiv.innerHTML = '';
+
+    google.script.run
+        .withSuccessHandler(result => {
+            stopLoading(button, loading);
+            resultDiv.innerHTML = result;
+            if (String(result).indexOf('Attendance updated') !== 0) return;
+
+            const sr = document.getElementById('updateSearchResult');
+            const sameStudentAndDay = rollInput.dataset.roll === roll && rollInput.dataset.date === date;
+            if (sameStudentAndDay && /^Student:/.test(sr.textContent.trim()) && sr.textContent.indexOf('|') !== -1) {
+                // server እንደገና ሳይጠራ ወዲያው በ browser ላይ ያድሳል
+                sr.innerHTML = sr.innerHTML.replace(/\|[^|]*$/, '|' + newStatus);
+            } else {
+                searchForUpdate(document.querySelector('#updateSection button'));
+            }
+        })
+        .withFailureHandler(error => {
+            stopLoading(button, loading);
+            console.error('Update error:', error);
+            resultDiv.innerHTML = "An error occurred: " + errText_(error);
+        })
+        .updateAttendance(subject, roll, date, newStatus);
+}
+
+/* ===================== Start ===================== */
+window.addEventListener('DOMContentLoaded', loadSections);
+</script>
+</body>
+</html>
